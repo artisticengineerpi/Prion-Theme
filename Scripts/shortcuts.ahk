@@ -96,19 +96,29 @@ SetTransPycharm(opacity, winCriteria) {
     Sleep(2000) ; Wait for a moment to ensure the process is terminated
 }
 
-
 ^!k:: { ; Ctrl + Alt + K
     KillAestheticApps()
 }
 
+
 KillAestheticApps() {
-    apps := ["Rainmeter.exe", "QuickLook.exe", "RoundedTB.exe", "System Transparency.exe", "Lively.exe","Todoist.exe","Obsidian.exe"]
+    apps := ["Rainmeter.exe", "QuickLook.exe", "RoundedTB.exe", "Todoist.exe", "Obsidian.exe"]
+    
+    ; Kill normal apps
     for index, app in apps {
-        try {
-            Run('taskkill /f /im "' app '"', , "Hide")
-        } catch {
-            continue ; Skip and move to the next application without showing a message
-        }
+        Run(A_ComSpec ' /c taskkill /f /im "' app '"', , "Hide")
+    }
+    
+    ; Kill System Transparency separately (has space in name)
+    Run(A_ComSpec ' /c taskkill /f /im "System Transparency.exe"', , "Hide")
+    
+    ; Kill Lively last and handle the shutdown dialog
+    Run(A_ComSpec ' /c taskkill /f /im "Lively.exe"', , "Hide")
+    
+    ; Wait briefly then close the shutdown dialog if it appears
+    Sleep(500)
+    if WinExist("Shut Down Windows") {
+        WinClose("Shut Down Windows")
     }
 }
 
