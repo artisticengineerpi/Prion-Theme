@@ -105,7 +105,7 @@ KillAestheticApps() {
     apps := ["Rainmeter.exe", "QuickLook.exe", "RoundedTB.exe", "System Transparency.exe", "Lively.exe","Todoist.exe","Obsidian.exe"]
     for index, app in apps {
         try {
-            Run("taskkill /f /im " app, , "Hide")
+            Run('taskkill /f /im "' app '"', , "Hide")
         } catch {
             continue ; Skip and move to the next application without showing a message
         }
